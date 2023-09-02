@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DeliveryFeeWidget extends StatelessWidget {
   final double distanceInKm; // Pass the distance as a parameter
 
-  DeliveryFeeWidget({required this.distanceInKm, required double deliveryFee});
+  DeliveryFeeWidget({required this.distanceInKm});
 
   // Define a method to calculate delivery fees based on the distance
   double calculateDeliveryFee() {

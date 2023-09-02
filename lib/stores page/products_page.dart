@@ -105,6 +105,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     Container(
                       height: MediaQuery.of(context).size.width * 0.55 - 140,
                       color: Colors.grey[300],
+                      // ignore: unnecessary_null_comparison
                       child: product.imageUrl != null
                           ? Image.network(product.imageUrl) // Display image if available
                           : Placeholder(), // Placeholder if no image URL is provided

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neabuy/models/store.dart';
+import 'package:neabuy/stores%20page/cart/checkout_page.dart';
 
 class CartPage extends StatefulWidget {
   final List<Product> cartItems;
@@ -13,6 +14,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   Map<Product, int> productQuantities = {};
   bool isCartEmpty = true;
+  double totalCost = 0;
 
   @override
   void initState() {
@@ -23,6 +25,7 @@ class _CartPageState extends State<CartPage> {
           : 1;
     }
     updateCartEmptyState();
+    calculateTotalCost();
   }
 
   void updateCartEmptyState() {
@@ -35,22 +38,30 @@ class _CartPageState extends State<CartPage> {
     double total = 0;
     for (final product in widget.cartItems) {
       final quantity = productQuantities[product] ?? 0;
-      total += product.totalPriceIncludingTax * quantity; // Use totalPriceIncludingTax
+      total += product.totalPriceIncludingTax * quantity;
     }
+    setState(() {
+      totalCost = total;
+    });
     return total;
+  }
+
+  void decreaseQuantity(Product product) {
+    setState(() {
+      if (productQuantities[product] != null && productQuantities[product]! > 1) {
+        productQuantities[product] = productQuantities[product]! - 1;
+      } else {
+        productQuantities.remove(product);
+        widget.cartItems.remove(product);
+      }
+      calculateTotalCost();
+    });
   }
 
   void increaseQuantity(Product product) {
     setState(() {
       productQuantities[product] = (productQuantities[product] ?? 0) + 1;
-    });
-  }
-
-  void decreaseQuantity(Product product) {
-    setState(() {
-      if (productQuantities[product] != 0 && productQuantities[product]! > 1) {
-        productQuantities[product] = productQuantities[product]! - 1;
-      }
+      calculateTotalCost();
     });
   }
 
@@ -95,10 +106,17 @@ class _CartPageState extends State<CartPage> {
                       elevation: 3,
                       margin: EdgeInsets.symmetric(vertical: 8),
                       child: ListTile(
-                        leading: Image.network(product.imageUrl, width: 50, height: 50), // Display the image
+                        leading: Container(
+                          width: 40,
+                          height: 40,
+                          child: Image.network(
+                            product.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         title: Text(product.name),
-                        subtitle: Text('\$${product.totalPriceIncludingTax.toStringAsFixed(2)}'),
-
+                        subtitle:
+                            Text('\$${product.totalPriceIncludingTax.toStringAsFixed(2)}'),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -122,9 +140,47 @@ class _CartPageState extends State<CartPage> {
                   },
                 ),
               ),
+            Text(
+              'Total: \$${totalCost.toStringAsFixed(2)}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                double totalCost = 0;
+                for (final product in widget.cartItems) {
+                  final quantity = productQuantities[product] ?? 0;
+                  totalCost += product.totalPriceIncludingTax * quantity;
+                }
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CheckoutPage(
+                      cartItems: widget.cartItems,
+                      productQuantities: productQuantities,
+                      productTotalPrices: calculateProductTotalPrices(),
+                      totalCost: totalCost,
+                       distanceInKm: 5.0, deliveryFee: 50,
+                    ),
+                  ),
+                );
+              },
+              child: Text('Proceed to Checkout'),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Map<Product, double> calculateProductTotalPrices() {
+    final Map<Product, double> productTotalPrices = {};
+    for (final product in widget.cartItems) {
+      final quantity = productQuantities[product] ?? 0;
+      productTotalPrices[product] = product.totalPriceIncludingTax * quantity;
+    }
+    return productTotalPrices;
   }
 }

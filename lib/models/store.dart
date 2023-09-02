@@ -4,6 +4,7 @@ class Product {
   final double taxRate;
   final String description;
   final String weight;
+  final String imageUrl; // Add this property
 
   Product({
     required this.name,
@@ -11,14 +12,16 @@ class Product {
     required this.taxRate,
     required this.description,
     required this.weight,
+    required this.imageUrl, // Add this parameter to the constructor
   });
 
   double get totalPriceIncludingTax {
     return price * (1 + taxRate);
   }
 
-  get imageUrl => null;
+
 }
+
 
 
 
