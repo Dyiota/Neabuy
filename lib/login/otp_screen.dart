@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neabuy/login/welcome/introduction_screen.dart';
+import 'package:neabuy/login/Address_screen.dart';
 
 class OTPScreen extends StatelessWidget {
   final String phoneNumber; // Passed from LoginPage
@@ -18,9 +18,10 @@ class OTPScreen extends StatelessWidget {
       final isOtpVerified = await _verifyOTP(enteredOTP);
 
       if (isOtpVerified) {
+        // Navigate to the AddressScreen after OTP verification
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (_) => IntroductionScreens(), // Replace with your introduction screens widget
+            builder: (_) => AddressScreen(),
           ),
         );
       } else {

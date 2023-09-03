@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:neabuy/login/signup_screen.dart';
-import 'otp_screen.dart'; // Import your OTP screen
-
+import 'package:neabuy/business/business_registration_page.dart';
+import 'package:neabuy/login/otp_screen.dart';
+import 'dart:async'; // Import the 'dart:async' library
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,15 +9,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String phoneNumber = '';
-  bool phoneNumberNotFound = false; // Track if phone number is not found
-  bool showPhoneNumberEmptyError = false; // Track if phone number is empty
+  final TextEditingController phoneNumberController = TextEditingController();
+  bool showError = false; // Track if the error message should be shown
+
+  void showErrorMessage() {
+    setState(() {
+      showError = true;
+    });
+
+    // Set a timer to hide the error message after 3 seconds
+    Timer(Duration(seconds: 3), () {
+      setState(() {
+        showError = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Use a LinearGradient for the background color
-      backgroundColor: Colors.transparent,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -35,121 +45,100 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // App Logo or Icon
-                Container(
+                Image.asset(
+                  'assets/logo.png', // Replace with your app's logo image
                   width: 120.0,
                   height: 120.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    // You can use your app's logo image here
-                  ),
-                  // Replace with your logo image
-                  child: Icon(
-                    Icons.lock,
-                    size: 60.0,
-                    color: Colors.blue,
-                  ),
                 ),
                 SizedBox(height: 20.0),
                 Text(
                   'Welcome to MyApp', // Your app's name
                   style: TextStyle(
-                    color: Colors.black, // Use black or a dark color for text on light background
+                    color: Colors.black,
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 20.0),
-                // Replace the password input field with phone number input field
-                TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      phoneNumber = value;
-                      phoneNumberNotFound = false; // Reset the error message when the user types
-                      showPhoneNumberEmptyError = false; // Reset the empty field error message
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Phone Number',
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.8), // Slightly transparent white
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Column(
+                  children: [
+                    TextField(
+                      controller: phoneNumberController,
+                      keyboardType: TextInputType.phone,
+                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        hintText: 'Phone Number',
+                        hintStyle: TextStyle(color: Colors.black.withOpacity(0.7)),
+                        filled: true,
+                        fillColor: Colors.black.withOpacity(0.2),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.phone,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    // Show error message if phone number is not found
-                    errorText: phoneNumberNotFound ? 'Account not found, please sign up' : null,
-                  ),
+                    SizedBox(height: 10.0),
+                    if (showError)
+                      Text(
+                        'Please enter your phone number.',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                  ],
                 ),
-                SizedBox(height: 20.0),
+                SizedBox(height: 10.0), // Increased spacing
+
                 ElevatedButton(
                   onPressed: () {
-                    if (phoneNumber.isEmpty) {
-                      // Show the empty field error message
-                      setState(() {
-                        showPhoneNumberEmptyError = true;
-                        phoneNumberNotFound = false; // Reset the not found error message
-                      });
+                    final phoneNumber = phoneNumberController.text;
+                    if (phoneNumber.isNotEmpty) {
+                      // Navigate to the OTP screen with the entered phone number
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => OTPScreen(phoneNumber: phoneNumber),
+                        ),
+                      );
                     } else {
-                      // Simulate checking if phone number exists (replace with your Firebase logic)
-                      final phoneExists = false; // Replace with your Firebase logic
-                      // ignore: dead_code
-                      if (phoneExists) {
-                        // Navigate to the OTP screen when the "Login" button is pressed
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => OTPScreen(
-                              phoneNumber: phoneNumber,
-                            ),
-                          ),
-                        );
-                      } else {
-                        // Set the phone number not found flag to show error message
-                        setState(() {
-                          phoneNumberNotFound = true;
-                          showPhoneNumberEmptyError = false; // Reset the empty field error message
-                        });
-                      }
+                      // Show an error message below the phone number field
+                      showErrorMessage();
                     }
                   },
-                  child: Text('Login'),
+                  child: Text('Next'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
-                    onPrimary: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+                    primary: Color(0xFF2980B9), // Dark blue
                     padding: EdgeInsets.symmetric(horizontal: 40.0),
                   ),
                 ),
-                if (showPhoneNumberEmptyError)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      'Please enter a registered Phone number',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                SizedBox(height: 20.0),
+
+                SizedBox(height: 100.0), // Increased spacing
+
                 Text(
-                  'Don\'t have an account?',
-                  style: TextStyle(color: Colors.black), // Use black for text on light background
+                  'Looking to take your business online?',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                TextButton(
+
+                SizedBox(height: 10.0), // Increased spacing
+
+                ElevatedButton(
                   onPressed: () {
-                    // Navigate to the SignupPage when the "Sign Up" button is pressed
+                    // Navigate to the BusinessRegistrationPage when Register Business is pressed
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => SignupPage(),
+                        builder: (_) => BusinessRegistrationPage(),
                       ),
                     );
                   },
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      color: Colors.blue, // Use an accent color for the button
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Text('Register as Business'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF2980B9), // Dark blue
+                    padding: EdgeInsets.symmetric(horizontal: 40.0),
                   ),
                 ),
               ],
