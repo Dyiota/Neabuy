@@ -7,6 +7,8 @@ class PaymentPage extends StatelessWidget {
   // Simulated variable to track whether stores accepted the order
   bool storesAcceptedOrder = false;
 
+  PaymentPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

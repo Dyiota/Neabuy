@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:neabuy/map%20screen/map_screen.dart';
-
 import 'package:neabuy/models/store.dart' as StoreModel;
+import 'package:neabuy/profile/profile_page.dart';
 import 'package:neabuy/stores%20page/stores_page.dart';
-
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -61,10 +60,43 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+ void _navigateToProfilePage() {
+  if (_selectedIndex == 0) { // Only navigate to the profile page if on the home page
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => ProfilePage()),
+    );
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: Stack(
+        children: <Widget>[
+          _pages[_selectedIndex],
+            if (_selectedIndex == 0) // Show the profile button only on the home page
+          Positioned(
+            top: 20,
+            left: 20,
+            child: GestureDetector(
+              onTap: _navigateToProfilePage, // Navigate to the profile page
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blue,
+                ),
+                child: Icon(
+                  Icons.person,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
