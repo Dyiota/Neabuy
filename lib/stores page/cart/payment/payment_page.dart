@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:neabuy/order%20routing/order_routing_screen.dart';
 import 'package:neabuy/order%20tracking/track_order_status_page.dart';
 
+// ignore: must_be_immutable
 class PaymentPage extends StatelessWidget {
   // Simulated variable to track whether stores accepted the order
   bool storesAcceptedOrder = false;

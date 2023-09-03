@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:neabuy/login/login_page.dart';
 
-import 'home screen/home_screen.dart';
 
 void main() => runApp(NeaBuyApp());
 
@@ -12,7 +12,7 @@ class NeaBuyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: LoginPage(),
     );
   }
 }

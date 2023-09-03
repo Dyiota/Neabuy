@@ -1,8 +1,16 @@
-// business_registration.dart
-
 import 'package:flutter/material.dart';
+import 'package:neabuy/business/business%20verification/business_verification.dart';
+import 'package:neabuy/business/business%20verification/verification_status_screen.dart';
 
-class BusinessRegistrationPage extends StatelessWidget {
+class BusinessRegistrationPage extends StatefulWidget {
+  @override
+  _BusinessRegistrationPageState createState() =>
+      _BusinessRegistrationPageState();
+}
+
+class _BusinessRegistrationPageState extends State<BusinessRegistrationPage> {
+  bool isVerificationInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,13 +56,51 @@ class BusinessRegistrationPage extends StatelessWidget {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Add logic to handle business registration here
+                // Start the verification process
+                _startVerificationProcess();
               },
-              child: Text('Register Business'),
+              child: isVerificationInProgress
+                  ? CircularProgressIndicator()
+                  : Text('Register Business'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _startVerificationProcess() async {
+    setState(() {
+      isVerificationInProgress = true;
+    });
+
+    final businessVerification = BusinessVerification();
+    final verificationResult = await businessVerification.verifyBusiness(
+      // Pass the input data for verification
+      businessName: 'Example Business',
+      phoneNumber: '1234567890',
+      emailAddress: 'example@example.com',
+      location: 'Example Location',
+    );
+
+    setState(() {
+      isVerificationInProgress = false;
+    });
+
+    if (verificationResult) {
+      // Verification is successful, navigate to the status screen with "Approved" status
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => VerificationStatusScreen(status: 'Approved'),
+        ),
+      );
+    } else {
+      // Verification failed, navigate to the status screen with "Rejected" status
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => VerificationStatusScreen(status: 'Rejected'),
+        ),
+      );
+    }
   }
 }

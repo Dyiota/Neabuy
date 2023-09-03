@@ -39,6 +39,12 @@ dependencies:
   location: ^5.0.3
   flutter_search_bar: ^3.0.0-dev.1
   geolocator: ^10.0.0
+  carousel_slider: ^4.2.1
+  connectivity: ^3.0.6  # Ensure the version number is correct
+  fluttertoast: ^8.0.7
+  graphic: ^2.2.0
+  fl_chart: ^0.63.0
+  syncfusion_flutter_charts: ^22.2.11
 
 dev_dependencies:
   flutter_test:
