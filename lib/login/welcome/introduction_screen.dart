@@ -1,34 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:neabuy/home%20screen/home_screen.dart';
 
-class IntroductionScreens extends StatelessWidget {
+class WelcomeSlideScreenCustomer extends StatefulWidget {
+  @override
+  _WelcomeSlideScreenState createState() => _WelcomeSlideScreenState();
+}
+
+class _WelcomeSlideScreenState extends State<WelcomeSlideScreenCustomer> {
+  final List<String> slideContents = [
+    'Slide 1\n\nLorem ipsum dolor sit amet...',
+    'Slide 2\n\nLorem ipsum dolor sit amet...',
+    'Slide 3\n\nLorem ipsum dolor sit amet...',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Introduction Screens'),
+        title: Text('Welcome to Neabuy'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            Text('Welcome to NeaBuy App!'),
-            // Add your introduction screen content here
-            // You can use PageView or any other widgets to create multiple screens
-            // that explain your app.
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the home page or any other desired screen
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (_) => MyHomePage(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CarouselSlider(
+                  items: slideContents.map((content) {
+                    return Container(
+                      color: Colors.blue, // Set background color or add an image
+                      child: Center(
+                        child: Text(
+                          content,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  options: CarouselOptions(
+                    autoPlay: false, // Set to true for automatic slide animation
+                    aspectRatio: 16 / 9,
+                    enlargeCenterPage: true,
                   ),
-                );
-              },
-              child: Text('Get Started'),
+                ),
+                SizedBox(height: 20.0), // Adjust spacing
+              ],
+            ),
+            Positioned(
+              bottom: 20.0,
+              right: 20.0,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Handle the "Skip" action
+                  _skipSlides();
+                },
+                child: Text('Skip'),
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _skipSlides() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => MyHomePage(),
       ),
     );
   }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:neabuy/business%20management/GraphsAnalyticsScreen.dart';
+import 'package:neabuy/business%20management/order%20management/order_management_screen.dart';
+import 'package:neabuy/business/business%20main%20page/business%20profile/business_profile_screen.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -27,35 +30,65 @@ class BusinessMainPage extends StatelessWidget {
                 CardButton(
                   title: 'Incoming Orders',
                   onPressed: () {
-                    // Handle incoming orders button click here
-                    // You can navigate or perform any other action
+                    // Show a dialog when the button is pressed
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text("Incoming Order"),
+                          content: Text("You have a new order from a customer."),
+                          actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text("OK"),
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                                // Navigate to the Order Management screen
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => OrderManagementScreen()),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
+
                 const SizedBox(height: 16.0), // Add spacing
                 // Use a GridView.builder for Inventory Management and Order Management
                 GridView.builder(
-  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2,
-    crossAxisSpacing: 16.0, // Add spacing horizontally
-    mainAxisSpacing: 16.0, // Add spacing vertically
-    childAspectRatio:1.6, // Adjust the aspect ratio to reduce the size
-  ),
-  shrinkWrap: true,
-  itemCount: 2,
-  itemBuilder: (context, index) {
-    return _RoundedBox(
-      child: CardButton(
-        title: index == 0
-            ? 'Inventory Management'
-            : 'Order Management',
-        onPressed: () {
-          // Navigate to Inventory Management or Order Management
-        },
-      ),
-    );
-  },
-),
-
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16.0, // Add spacing horizontally
+                    mainAxisSpacing: 16.0, // Add spacing vertically
+                    childAspectRatio: 1.6, // Adjust the aspect ratio to reduce the size
+                  ),
+                  shrinkWrap: true,
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    return _RoundedBox(
+                      child: CardButton(
+                        title: index == 0
+                            ? 'Inventory Management'
+                            : 'Order Management',
+                        onPressed: () {
+                          // Navigate to Inventory Management or Order Management
+                          if (index == 0) {
+                            // Navigate to Inventory Management
+                          } else {
+                            // Navigate to Order Management
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => OrderManagementScreen()),
+                            );
+                          }
+                        },
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 16.0), // Add spacing
                 // Wrap the CustomGraphWidget with Expanded to push it up
                 Expanded(
@@ -82,9 +115,13 @@ class BusinessMainPage extends StatelessWidget {
         onTap: (int index) {
           // Handle bottom navigation bar item taps here
           if (index == 0) {
-            // Navigate to the home page
+            // Navigate to the home page or perform other actions
           } else if (index == 1) {
             // Navigate to the profile page
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileScreen()), // Replace with your profile screen widget
+            );
           }
         },
       ),
@@ -135,23 +172,15 @@ class CardButton extends StatelessWidget {
         onTap: onPressed,
         child: Container(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2980B9),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              const Icon(
-                Icons.arrow_forward,
+          child: Center( // Center the button title
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
                 color: Color(0xFF2980B9),
               ),
-            ],
+            ),
           ),
         ),
       ),

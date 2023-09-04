@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neabuy/login/welcome/introduction_screen.dart';
 
+
 // ignore: must_be_immutable
 class AddressScreen extends StatelessWidget {
   String address = '';
@@ -67,7 +68,7 @@ class AddressScreen extends StatelessWidget {
                 // After successfully entering details, navigate to the welcome screen
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (_) => IntroductionScreens(),
+                    builder: (_) => WelcomeSlideScreenCustomer(),
                   ),
                 );
               },

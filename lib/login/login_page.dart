@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       // Navigate to the OTP screen with the entered phone number
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => OTPScreen(phoneNumber: phoneNumber),
+                          builder: (_) => OTPScreen(phoneNumber: phoneNumber, verificationId: '',),
                         ),
                       );
                     } else {

@@ -4,7 +4,7 @@ import 'package:neabuy/login/Address_screen.dart';
 class OTPScreen extends StatelessWidget {
   final String phoneNumber; // Passed from LoginPage
 
-  OTPScreen({required this.phoneNumber});
+  OTPScreen({required this.phoneNumber, required String verificationId});
 
   // Placeholder OTP verification logic
   Future<bool> _verifyOTP(String enteredOTP) async {

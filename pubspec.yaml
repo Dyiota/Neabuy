@@ -45,6 +45,10 @@ dependencies:
   graphic: ^2.2.0
   fl_chart: ^0.63.0
   syncfusion_flutter_charts: ^22.2.11
+  audioplayers: ^5.1.0
+  http: ^1.1.0
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.9.0
 
 dev_dependencies:
   flutter_test:
